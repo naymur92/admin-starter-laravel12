@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Laravel\Passport\Http\Controllers\AccessTokenController;
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
     // Dashboard
@@ -47,3 +48,5 @@ Auth::routes([
     'reset' => false,
     'confirm' => false,
 ]);
+
+Route::post('oauth-admin-app/token', [AccessTokenController::class, 'issueToken'])->middleware(['throttle:60,2']);
