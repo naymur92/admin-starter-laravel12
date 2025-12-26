@@ -28,10 +28,23 @@ class PermissionTableSeeder extends Seeder
       'user-create',
       'user-edit',
       'user-delete',
+      'oauth-client-list',
+      'oauth-client-create',
+      'oauth-client-edit',
+      'oauth-client-delete',
+      'activity-log-list',
+      'activity-log-view',
+      'activity-log-delete',
+      'login-history-list',
+      'login-history-view',
+      'system-log-list',
+      'system-log-view',
+      'system-log-download',
+      'system-log-delete',
     ];
 
     foreach ($permissions as $permission) {
-      Permission::create(['name' => $permission]);
+      Permission::firstOrCreate(['name' => $permission]);
     }
   }
 }

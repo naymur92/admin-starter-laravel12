@@ -90,6 +90,10 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-end">
+                        <a href="{{ route('user-profile.login-history') }}" class="btn btn-outline-info mr-2 br-5 waves-effect waves-light">
+                            <i class="fas fa-history"></i> My Login History
+                        </a>
+
                         <x-button.edit href="{{ route('user-profile.edit') }}">Edit Profile</x-button.edit>
                     </div>
                 </div>

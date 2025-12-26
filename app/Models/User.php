@@ -101,4 +101,14 @@ class User extends Authenticatable implements OAuthenticatable
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function loginHistory()
+    {
+        return $this->hasMany(\App\Models\LoginHistory::class);
+    }
+
+    public function activityLogs()
+    {
+        return $this->morphMany(\App\Models\ActivityLog::class, 'causer');
+    }
 }

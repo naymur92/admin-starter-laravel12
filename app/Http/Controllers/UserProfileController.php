@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LoginHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -119,5 +120,15 @@ class UserProfileController extends Controller
 
         flash()->addSuccess('Password changed successfully!');
         return redirect()->route('user-profile.change-password');
+    }
+
+    // view my login history
+    public function myLoginHistory(Request $request)
+    {
+        $logins = LoginHistory::where('user_id', Auth::id())
+            ->orderBy('login_at', 'desc')
+            ->paginate(20);
+
+        return view('pages.user-profile.login-history', compact('logins'));
     }
 }

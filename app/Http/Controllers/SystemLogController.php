@@ -1,0 +1,159 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+
+class SystemLogController extends Controller
+{
+    /**
+     * Display a listing of system logs.
+     */
+    public function index(Request $request)
+    {
+        $this->authorize('system-log-list');
+
+        $logPath = storage_path('logs');
+        $files = File::glob($logPath . '/*.log');
+
+        // Sort by modified time, newest first
+        usort($files, function ($a, $b) {
+            return File::lastModified($b) - File::lastModified($a);
+        });
+
+        $logs = collect($files)->map(function ($file) {
+            return [
+                'name' => basename($file),
+                'path' => $file,
+                'size' => $this->formatBytes(File::size($file)),
+                'modified' => File::lastModified($file),
+                'modified_human' => \Carbon\Carbon::createFromTimestamp(File::lastModified($file))->diffForHumans(),
+            ];
+        });
+
+        return view('pages.system-logs.index', compact('logs'));
+    }
+
+    /**
+     * Display the specified log file.
+     */
+    public function show(Request $request, $filename)
+    {
+        $this->authorize('system-log-view');
+
+        $logPath = storage_path('logs/' . $filename);
+
+        if (!File::exists($logPath) || !str_ends_with($filename, '.log')) {
+            abort(404, 'Log file not found');
+        }
+
+        $lines = $request->get('lines', 100);
+        $search = $request->get('search', '');
+
+        // Read file from bottom
+        $content = $this->tailFile($logPath, $lines);
+
+        // Filter by search term
+        if ($search) {
+            $content = array_filter($content, function ($line) use ($search) {
+                return stripos($line, $search) !== false;
+            });
+        }
+
+        return view('pages.system-logs.show', [
+            'filename' => $filename,
+            'content' => $content,
+            'lines' => $lines,
+            'search' => $search,
+        ]);
+    }
+
+    /**
+     * Download the specified log file.
+     */
+    public function download($filename)
+    {
+        $this->authorize('system-log-download');
+
+        $logPath = storage_path('logs/' . $filename);
+
+        if (!File::exists($logPath) || !str_ends_with($filename, '.log')) {
+            abort(404, 'Log file not found');
+        }
+
+        return response()->download($logPath);
+    }
+
+    /**
+     * Delete the specified log file.
+     */
+    public function destroy($filename)
+    {
+        $this->authorize('system-log-delete');
+
+        $logPath = storage_path('logs/' . $filename);
+
+        if (!File::exists($logPath) || !str_ends_with($filename, '.log')) {
+            abort(404, 'Log file not found');
+        }
+
+        // Don't allow deleting current day's log
+        if ($filename === 'laravel.log' || $filename === date('Y-m-d') . '.log') {
+            return redirect()->route('system-logs.index')
+                ->with('error', 'Cannot delete the current log file.');
+        }
+
+        File::delete($logPath);
+
+        return redirect()->route('system-logs.index')
+            ->with('success', 'Log file deleted successfully.');
+    }
+
+    /**
+     * Read the last N lines from a file.
+     */
+    private function tailFile($filepath, $lines = 100)
+    {
+        $handle = fopen($filepath, "r");
+        $linecounter = $lines;
+        $pos = -2;
+        $beginning = false;
+        $text = [];
+
+        while ($linecounter > 0) {
+            $t = " ";
+            while ($t != "\n") {
+                if (fseek($handle, $pos, SEEK_END) == -1) {
+                    $beginning = true;
+                    break;
+                }
+                $t = fgetc($handle);
+                $pos--;
+            }
+            $linecounter--;
+            if ($beginning) {
+                rewind($handle);
+            }
+            $text[$lines - $linecounter - 1] = fgets($handle);
+            if ($beginning) break;
+        }
+        fclose($handle);
+
+        return array_reverse($text);
+    }
+
+    /**
+     * Format bytes to human readable format.
+     */
+    private function formatBytes($bytes, $precision = 2)
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+
+        for ($i = 0; $bytes > 1024; $i++) {
+            $bytes /= 1024;
+        }
+
+        return round($bytes, $precision) . ' ' . $units[$i];
+    }
+}

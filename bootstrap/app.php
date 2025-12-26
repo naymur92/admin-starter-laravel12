@@ -15,9 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'api.headers' => \App\Http\Middleware\ApiHeadersCheck::class,
             'api.token.headers' => \App\Http\Middleware\TokenApiHeadersCheck::class,
-            'admin' => \App\Http\Middleware\AdminMiddleware::class
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'log.activity' => \App\Http\Middleware\LogActivity::class,
         ]);
         $middleware->api(append: ['api.headers']);
+        $middleware->web(append: ['log.activity']);
 
         $middleware->validateCsrfTokens(except: [
             'oauth-admin-app/*',

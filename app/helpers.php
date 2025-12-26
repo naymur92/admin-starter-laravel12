@@ -43,3 +43,27 @@ if (!function_exists('generateAssetPath')) {
         return $file . '?id=' . $id;
     }
 }
+
+// log activity helper
+if (!function_exists('logActivity')) {
+    function logActivity(
+        string $description,
+        ?Illuminate\Database\Eloquent\Model $subject = null,
+        ?array $properties = null,
+        ?string $event = null,
+        string $logName = 'default'
+    ) {
+        return \App\Services\ActivityLogger::log($description, $subject, null, $properties, $event, $logName);
+    }
+}
+
+// track login helper
+if (!function_exists('trackLogin')) {
+    function trackLogin(
+        \App\Models\User $user,
+        bool $isSuccessful = true,
+        string $method = 'web'
+    ) {
+        return \App\Services\LoginTracker::track($user, $isSuccessful, $method);
+    }
+}

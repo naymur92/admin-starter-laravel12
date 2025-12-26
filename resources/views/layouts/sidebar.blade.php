@@ -78,6 +78,48 @@
         </li>
     @endcan
 
+    {{-- Nav Item - Logs & Audit Menu --}}
+    @canany(['activity-log-list', 'login-history-list', 'system-log-list'])
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+        <!-- Heading -->
+        <div class="sidebar-heading mb-2">
+            Activity & Audit
+        </div>
+
+        @php
+            $isActiveLogsMenu = request()->routeIs('activity-logs.*', 'login-history.*', 'system-logs.*');
+        @endphp
+        <li class="nav-item {{ $isActiveLogsMenu ? 'active' : '' }}">
+            <a class="nav-link {{ $isActiveLogsMenu ? '' : 'collapsed' }}" href="#" data-toggle="collapse" data-target="#logsMenu"
+                aria-expanded="{{ $isActiveLogsMenu ? 'true' : 'false' }}" aria-controls="logsMenu">
+                <i class="fas fa-history"></i>
+                <span>Logs &amp; Audit</span>
+            </a>
+            <div id="logsMenu" class="collapse {{ $isActiveLogsMenu ? 'show' : '' }}" aria-labelledby="headingLogs" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    @can('activity-log-list')
+                        <a class="collapse-item {{ request()->routeIs('activity-logs.*') ? 'active' : '' }}" href="{{ route('activity-logs.index') }}">
+                            <i class="fas fa-clipboard-list mr-2"></i>Activity Logs
+                        </a>
+                    @endcan
+
+                    @can('login-history-list')
+                        <a class="collapse-item {{ request()->routeIs('login-history.*') ? 'active' : '' }}" href="{{ route('login-history.index') }}">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login History
+                        </a>
+                    @endcan
+
+                    @can('system-log-list')
+                        <a class="collapse-item {{ request()->routeIs('system-logs.*') ? 'active' : '' }}" href="{{ route('system-logs.index') }}">
+                            <i class="fas fa-file-alt mr-2"></i>System Logs
+                        </a>
+                    @endcan
+                </div>
+            </div>
+        </li>
+    @endcanany
+
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
