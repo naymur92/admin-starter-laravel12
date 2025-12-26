@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\BackupController;
+use App\Http\Controllers\CacheController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginHistoryController;
 use App\Http\Controllers\OAuthClientController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SystemLogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserProfileController;
@@ -70,6 +73,36 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function 
         Route::get('/{filename}', [SystemLogController::class, 'show'])->name('show');
         Route::get('/{filename}/download', [SystemLogController::class, 'download'])->name('download');
         Route::delete('/{filename}', [SystemLogController::class, 'destroy'])->name('destroy');
+    });
+
+    // Settings & Configuration
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [SettingsController::class, 'index'])->name('settings');
+        Route::get('/site-config', [SettingsController::class, 'getSiteConfig'])->name('settings.site-config');
+        Route::post('/site-config', [SettingsController::class, 'updateSiteConfig'])->name('settings.update-site-config');
+        Route::post('/update/{key}', [SettingsController::class, 'update'])->name('settings.update');
+        Route::post('/bulk-update', [SettingsController::class, 'bulkUpdate'])->name('settings.bulk-update');
+    });
+
+    // Backup & Restore
+    Route::prefix('backups')->group(function () {
+        Route::get('/', [BackupController::class, 'index'])->name('backups.index');
+        Route::post('/create', [BackupController::class, 'create'])->name('backups.create');
+        Route::get('/{filename}/download', [BackupController::class, 'download'])->name('backups.download');
+        Route::post('/{filename}/restore', [BackupController::class, 'restore'])->name('backups.restore');
+        Route::delete('/{filename}', [BackupController::class, 'destroy'])->name('backups.destroy');
+    });
+
+    // Cache Management
+    Route::prefix('cache')->group(function () {
+        Route::get('/info', [CacheController::class, 'index'])->name('cache.info');
+        Route::post('/clear', [CacheController::class, 'clearCache'])->name('cache.clear');
+        Route::post('/clear-config', [CacheController::class, 'clearConfig'])->name('cache.clear-config');
+        Route::post('/clear-route', [CacheController::class, 'clearRoute'])->name('cache.clear-route');
+        Route::post('/clear-view', [CacheController::class, 'clearView'])->name('cache.clear-view');
+        Route::post('/clear-all', [CacheController::class, 'clearAll'])->name('cache.clear-all');
+        Route::post('/optimize', [CacheController::class, 'optimize'])->name('cache.optimize');
+        Route::post('/clear-optimization', [CacheController::class, 'clearOptimization'])->name('cache.clear-optimization');
     });
 });
 

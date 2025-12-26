@@ -41,6 +41,12 @@ class PermissionTableSeeder extends Seeder
       'system-log-view',
       'system-log-download',
       'system-log-delete',
+      'settings-view',
+      'settings-edit',
+      'backup-create',
+      'backup-restore',
+      'backup-delete',
+      'cache-clear',
     ];
 
     foreach ($permissions as $permission) {

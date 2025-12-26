@@ -1,11 +1,22 @@
+@php
+    $appLogo = \App\Models\Setting::get('app_logo');
+    $appName = \App\Models\Setting::get('app_name', config('app.name', 'Laravel'));
+@endphp
+
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('dashboard') }}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            {{-- <i class="fas fa-laugh-wink"></i> --}}
-        </div>
-        <div class="sidebar-brand-text mx-3">{{ config('app.name', 'Laravel') }}</div>
+        @if ($appLogo)
+            <div class="sidebar-brand-icon">
+                <img src="{{ asset($appLogo) }}" alt="Logo" style="max-height: 50px; max-width: 50px; object-fit: contain;">
+            </div>
+        @else
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+        @endif
+        <div class="sidebar-brand-text mx-3">{{ $appName }}</div>
     </a>
 
     <!-- Divider -->
@@ -119,6 +130,22 @@
             </div>
         </li>
     @endcanany
+
+
+    <!-- Settings & Configuration -->
+    @can('settings-view')
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading mb-2">
+            System
+        </div>
+
+        <li class="nav-item {{ request()->routeIs('settings') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('settings') }}">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </li>
+    @endcan
 
 
     <!-- Divider -->

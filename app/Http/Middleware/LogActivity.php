@@ -73,22 +73,49 @@ class LogActivity
         $method = $request->method();
 
         $descriptions = [
+            // User Management
             'users.store' => 'Created a new user',
             'users.update' => 'Updated user information',
             'users.change-status' => 'Changed user status',
             'users.update-password' => 'Changed user password',
+
+            // Role & Permission Management
             'roles.store' => 'Created a new role',
             'roles.update' => 'Updated role information',
             'roles.destroy' => 'Deleted a role',
             'permissions.store' => 'Created a new permission',
             'permissions.destroy' => 'Deleted a permission',
+
+            // OAuth Management
             'oauth-clients.store' => 'Created a new OAuth client',
             'oauth-clients.update' => 'Updated OAuth client',
             'oauth-clients.destroy' => 'Deleted OAuth client',
             'oauth-clients.regenerate-secret' => 'Regenerated OAuth client secret',
+
+            // User Profile
             'user-profile.update' => 'Updated own profile',
             'user-profile.update-password' => 'Changed own password',
             'user-profile.change-profile-picture' => 'Changed profile picture',
+
+            // Settings & Configuration
+            'settings.update-site-config' => 'Updated site configuration',
+            'settings.update' => 'Updated setting: ' . $request->route('key'),
+            'settings.bulk-update' => 'Bulk updated multiple settings',
+
+            // Backup Management
+            'backups.create' => 'Created database backup',
+            'backups.download' => 'Downloaded backup: ' . $request->route('filename'),
+            'backups.restore' => 'Restored database from backup: ' . $request->route('filename'),
+            'backups.destroy' => 'Deleted backup: ' . $request->route('filename'),
+
+            // Cache Management
+            'cache.clear' => 'Cleared application cache',
+            'cache.clear-config' => 'Cleared configuration cache',
+            'cache.clear-route' => 'Cleared route cache',
+            'cache.clear-view' => 'Cleared view cache',
+            'cache.clear-all' => 'Cleared all caches',
+            'cache.optimize' => 'Optimized application',
+            'cache.clear-optimization' => 'Cleared application optimization',
         ];
 
         return $descriptions[$routeName] ?? null;
