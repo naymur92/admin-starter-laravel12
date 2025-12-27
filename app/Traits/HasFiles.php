@@ -54,6 +54,7 @@ trait HasFiles
      * @param int $maxSizeBytes
      * @param string|null $info
      * @param bool $deleteExisting
+     * @param string|null $customPath Custom file path (overrides default)
      * @return Collection
      */
     public function saveFiles(
@@ -61,14 +62,15 @@ trait HasFiles
         array $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'],
         int $maxSizeBytes = 1048576, // 1 MB
         ?string $info = null,
-        bool $deleteExisting = false
+        bool $deleteExisting = false,
+        ?string $customPath = null
     ): Collection {
         $files = is_array($files) ? $files : [$files];
         $savedFiles = collect();
 
-        // Delete existing files if requested
-        if ($deleteExisting && $this->files()->isNotEmpty()) {
-            foreach ($this->files() as $existing) {
+        // Delete existing files if requested (only files matching the info type)
+        if ($deleteExisting && $info && $this->files()->isNotEmpty()) {
+            foreach ($this->files()->where('info', $info) as $existing) {
                 $this->removeFile($existing);
             }
         }
@@ -76,7 +78,7 @@ trait HasFiles
         $this->ensureIsModel();
         $opName = $this->getTable();
         $tableId = $this->getKey();
-        $filePath = 'assets/uploads/' . $opName;
+        $filePath = $customPath ?? ('assets/uploads/' . $opName);
 
         foreach ($files as $index => $file) {
             if (!in_array(strtolower($file->extension()), $allowedExtensions)) {
