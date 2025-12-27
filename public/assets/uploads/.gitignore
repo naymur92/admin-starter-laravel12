@@ -1,0 +1,9 @@
+# Ignore everything
+*
+# But not directories (so Git can traverse them)
+!*/
+# And not .gitignore
+!.gitignore
+# And not any index.html files
+!index.html
+!**/index.html
