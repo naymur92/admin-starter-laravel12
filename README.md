@@ -19,6 +19,7 @@ A secure Laravel application with OAuth2 authentication, role-based access contr
 -   PHP 8.3+
 -   MySQL/MariaDB
 -   Laravel Passport (OAuth2)
+-   Laravel UI
 -   Spatie Laravel Permission
 -   Defuse PHP Encryption
 -   Mobile Detect
@@ -44,7 +45,8 @@ See the [API Documentation](docs/API_DOCUMENTATION.md) for API usage.
 
 ### Authentication & Authorization
 
--   OAuth2 password grant authentication
+-   Laravel UI authentication for admin panel
+-   OAuth2 password grant authentication for API
 -   Token-based API authentication
 -   Role and permission-based access control
 
