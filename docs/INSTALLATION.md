@@ -20,7 +20,7 @@ Before you begin, ensure you have the following installed on your system:
 
 ```bash
 # If using Git
-git clone <repository-url> admin_template
+git clone git@github.com:naymur92/admin-starter-laravel12.git admin_template
 cd admin_template
 
 # Or extract the downloaded ZIP file and navigate to the project directory
@@ -35,6 +35,7 @@ composer install
 This will install all required PHP packages including:
 
 -   Laravel Framework
+-   Laravel UI
 -   Laravel Passport
 -   Spatie Laravel Permission
 -   Defuse PHP Encryption
@@ -114,18 +115,15 @@ If you want to populate the database with sample data:
 php artisan db:seed
 ```
 
-### 9. Install Laravel Passport
+### 9. Generate Laravel Passport Keys
 
 ```bash
-php artisan passport:install
+php artisan passport:keys
 ```
 
 This command will:
 
 -   Create encryption keys for generating secure access tokens
--   Create "personal access" and "password grant" clients
-
-**Important:** Save the client ID and secret displayed in the output. You'll need these for API authentication.
 
 ### 10. Generate Encryption Key
 
@@ -240,6 +238,10 @@ php artisan view:cache
 
 ## Post-Installation
 
+### Create Roles And Permissions
+
+You can create roles and permissions, set permissions from admin panel.
+
 ### Create Admin User
 
 You can create an admin user manually or through the database seeder.
@@ -256,8 +258,11 @@ Open your browser and navigate to:
 Use tools like Postman or cURL to test the API endpoints:
 
 ```bash
-# Health check
-curl http://admin-template.local/api/health
+# Test API
+curl --location 'http://admin-template.local/api/user' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: ••••••'
 ```
 
 ## Troubleshooting
@@ -278,17 +283,11 @@ curl http://admin-template.local/api/health
 
 **Issue: Passport Keys Missing**
 
--   Run `php artisan passport:install` again
+-   Run `php artisan passport:keys` again
 -   Check if `oauth-private.key` and `oauth-public.key` exist in `storage/`
-
-**Issue: Encryption Key Error**
-
--   Run `php artisan defuse:generate`
--   Check if `DEFUSE_KEY` exists in `.env`
 
 **Issue: File Upload Errors**
 
--   Ensure `storage/app/files/encrypted` directory exists
 -   Check directory permissions
 -   Verify `upload_max_filesize` in php.ini
 
