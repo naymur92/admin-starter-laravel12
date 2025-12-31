@@ -76,7 +76,7 @@ class SettingsController extends Controller
             // Generate unique filename
             $filename = time() . '_' . uniqid() . '.' . $logo->getClientOriginalExtension();
 
-            // Move file to public/assets/uploads/site
+            // Move file to public/uploads/site
             $logo->move($uploadPath, $filename);
 
             // Delete old logo if exists
@@ -86,7 +86,7 @@ class SettingsController extends Controller
             }
 
             // Store relative path
-            $logoPath = 'assets/uploads/site/' . $filename;
+            $logoPath = 'uploads/site/' . $filename;
             Setting::set('app_logo', $logoPath, 'string', 'site', 'Application logo');
             $changes['app_logo'] = $filename;
         }

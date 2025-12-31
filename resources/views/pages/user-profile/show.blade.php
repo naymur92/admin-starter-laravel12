@@ -53,7 +53,7 @@
                                     <img class="img-thumbnail" src="{{ asset('/') }}{{ Auth::user()->profilePicture->path . '/' . Auth::user()->profilePicture->name }}"
                                         style="width: 20vw;">
                                 @else
-                                    <img class="img-thumbnail" src="{{ asset('/') }}assets/uploads/users/user.png" style="width: 20vw;">
+                                    <img class="img-thumbnail" src="{{ asset('/') }}uploads/users/user.png" style="width: 20vw;">
                                 @endif
                                 <br>
                                 <button class="btn btn-outline-success mt-2" data-toggle="modal" data-target="#profilePictureChangeModal">Change Profile Picture</button>
@@ -75,7 +75,7 @@
                                                 @csrf
                                                 <div class="modal-body text-center">
                                                     <image-uploader
-                                                        initial-src="{{ Auth::user()->profilePicture ? asset('/') . Auth::user()->profilePicture->path . '/' . Auth::user()->profilePicture->name : asset('/') . 'assets/uploads/users/user.png' }}"
+                                                        initial-src="{{ Auth::user()->profilePicture ? asset('/') . Auth::user()->profilePicture->path . '/' . Auth::user()->profilePicture->name : asset('/') . 'uploads/users/user.png' }}"
                                                         name="profile_picture" input-id="_pp" size="15vw"></image-uploader>
                                                 </div>
                                                 <div class="modal-footer">

@@ -20,7 +20,7 @@
                 @if (Auth::user()->profilePicture)
                     <img class="img-profile rounded-circle" src="{{ asset('/') }}{{ Auth::user()->profilePicture->path . '/' . Auth::user()->profilePicture->name }}">
                 @else
-                    <img class="img-profile rounded-circle" src="{{ asset('/') }}assets/uploads/users/user.png">
+                    <img class="img-profile rounded-circle" src="{{ asset('/') }}uploads/users/user.png">
                 @endif
             </a>
             <!-- Dropdown - User Information -->

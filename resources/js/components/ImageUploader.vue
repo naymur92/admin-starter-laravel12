@@ -28,7 +28,7 @@ export default {
         shape: { type: String, default: 'square' } // 'square' or 'circle'
     },
     data() {
-        const defaultSrc = this.initialSrc || (window._asset ? window._asset + 'assets/uploads/no_image.png' : '');
+        const defaultSrc = this.initialSrc || (window._asset ? window._asset + 'uploads/no_image.png' : '');
         return {
             previewSrc: defaultSrc,
             originalSrc: defaultSrc,

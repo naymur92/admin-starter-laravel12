@@ -95,7 +95,7 @@
                                 @if ($user->profilePicture)
                                     <img class="img-thumbnail" src="{{ asset('/') }}{{ $user->profilePicture->path . '/' . $user->profilePicture->name }}" style="width: 20vw;">
                                 @else
-                                    <img class="img-thumbnail" src="{{ asset('/') }}assets/uploads/users/user.png" style="width: 20vw;">
+                                    <img class="img-thumbnail" src="{{ asset('/') }}uploads/users/user.png" style="width: 20vw;">
                                 @endif
 
                             </div>

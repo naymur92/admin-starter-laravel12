@@ -78,7 +78,7 @@ trait HasFiles
         $this->ensureIsModel();
         $opName = $this->getTable();
         $tableId = $this->getKey();
-        $filePath = $customPath ?? ('assets/uploads/' . $opName);
+        $filePath = $customPath ?? ('uploads/' . $opName);
 
         foreach ($files as $index => $file) {
             if (!in_array(strtolower($file->extension()), $allowedExtensions)) {
