@@ -53,8 +53,7 @@ class Handler extends ExceptionHandler
         }
 
         //  Otherwise it's a web route - redirect to login page
-        return redirect()
-            ->guest(route('login'))
-            ->with('error', 'Your session has expired or you have been logged out.');
+        // flash()->error('Your session has expired or you have been logged out.');
+        return redirect()->guest(route('login'));
     }
 }
